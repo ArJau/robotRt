@@ -19,8 +19,6 @@ async function init() {
   //criteria = { "id": "5b0d18ed88ee3836341f603d" };
   //criteria = { "id": "5dfcf2a4634f4110fc360457" };
 
-
-
   map.get("circuits").find(criteria, async function (err, lstCircuits) {
     if (err) {
       console.log("err: " + err);
@@ -64,7 +62,8 @@ async function loadData(){
   await deleteModel("realTimesAlerts", "realTimesAlerts", {});
   await deleteModel("realTimesVehicles", "realTimesVehicles", {});
   for (let i in lstUrlRt) {
-    log("Circuit: " + (Number(i) + 1) + ", url:" + lstUrlRt[i].url);
+    log("*************************************************************************");
+    log("Circuit: " + (Number(i) + 1) + ", id:" + lstUrlRt[i].id + ", url:" + lstUrlRt[i].url);
     await loadRealTime(lstUrlRt[i]);
   }
   console.log("..................fini.................")
@@ -91,7 +90,7 @@ async function loadRealTime(urlRt) {
         url: urlRt.url,
         encoding: null
       };
-      request(requestSettings, function (error, response, body) {
+      request(requestSettings, async function (error, response, body) {
         if (!error && response.statusCode == 200) {
           try {
             var feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(body);
@@ -110,12 +109,12 @@ async function loadRealTime(urlRt) {
               }
             }
             if (feedEntityVehicle.length > 0) {
-              log("enregistrement feedEntityVehicle: url: " + requestSettings.url + ", nb: " + feedEntityVehicle.length);
-              insertDb("realTimesVehicles", urlRt.id, "realTimesVehicles", feedEntityVehicle);
+              log(feedEntityVehicle.length + " VEHICULES (url: " + requestSettings.url + ") ");
+              await insertDb("", urlRt.id, "realTimesVehicles", feedEntityVehicle);
             }
-            if (feedEntityAlert.length > 0) {
-              log("enregistrement feedEntityAlert: url: " + requestSettings.url + ", nb: " + feedEntityAlert.length);
-              insertDb("realTimesAlerts", urlRt.id, "realTimesAlerts", feedEntityAlert);
+            if (feedEntityAlert.length > 0) { 
+              log(feedEntityAlert.length + " ALERTS (url: " + requestSettings.url + ")");
+              await insertDb("", urlRt.id, "realTimesAlerts", feedEntityAlert);
             }
 
             resolve();

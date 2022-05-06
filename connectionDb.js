@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mongoDbUrl = 'mongodb://127.0.0.1:27017'; //by default
+var mongoDbUrl = 'mongodb://127.0.0.1:27017'; //CHANGE_URL
 
 async function initDb(dbName){
     mongoose.connect(mongoDbUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName : dbName });
