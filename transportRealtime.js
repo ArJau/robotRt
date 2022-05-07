@@ -66,7 +66,7 @@ async function loadData(){
     log("Circuit: " + (Number(i) + 1) + ", id:" + lstUrlRt[i].id + ", url:" + lstUrlRt[i].url);
     await loadRealTime(lstUrlRt[i]);
   }
-  console.log("..................fini.................")
+  log("..................fini.................")
 }
 
 function deleteModel(model, collectionName, criteria){
@@ -76,7 +76,7 @@ function deleteModel(model, collectionName, criteria){
           if (err) 
               reject();
           if (delOK) 
-              resolve(console.log("Collection "+ collectionName + " deleted"));
+              resolve(log("Collection "+ collectionName + " deleted"));
       });
   })
 }
