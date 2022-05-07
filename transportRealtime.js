@@ -21,7 +21,7 @@ async function init() {
 
   map.get("circuits").find(criteria, async function (err, lstCircuits) {
     if (err) {
-      console.log("err: " + err);
+      console.log("err: " + err, true);
     }
 
     for (i in lstCircuits) {
@@ -32,7 +32,7 @@ async function init() {
         let id = circuit.id;
         let resource;
         for (let numResource in circuit.resources) {// a faire prendre les derniers fichier mis a jour
-          //console.log("numResource: "+ numResource);
+          //console.log("numResource: "+ numResource, true);
           resource = circuit.resources[numResource][0];
           url = resource.original_url;
           format = resource.format;
@@ -42,7 +42,7 @@ async function init() {
           }
 
         }
-        //console.log(url);
+        //console.log(url, true);
       }
       else {
         log("Resource inexistante id: " + id, true);
@@ -62,11 +62,11 @@ async function loadData(){
   await deleteModel("realTimesAlerts", "realTimesAlerts", {});
   await deleteModel("realTimesVehicles", "realTimesVehicles", {});
   for (let i in lstUrlRt) {
-    log("*************************************************************************");
-    log("Circuit: " + (Number(i) + 1) + ", id:" + lstUrlRt[i].id + ", url:" + lstUrlRt[i].url);
+    log("*************************************************************************", true);
+    log("Circuit: " + (Number(i) + 1) + ", id:" + lstUrlRt[i].id + ", url:" + lstUrlRt[i].url, true);
     await loadRealTime(lstUrlRt[i]);
   }
-  log("..................fini.................")
+  log("..................fini.................", true)
 }
 
 function deleteModel(model, collectionName, criteria){
@@ -109,25 +109,25 @@ async function loadRealTime(urlRt) {
               }
             }
             if (feedEntityVehicle.length > 0) {
-              log(feedEntityVehicle.length + " VEHICULES (url: " + requestSettings.url + ") ");
+              log(feedEntityVehicle.length + " VEHICULES (url: " + requestSettings.url + ") ", true);
               await insertDb("", urlRt.id, "realTimesVehicles", feedEntityVehicle);
             }
             if (feedEntityAlert.length > 0) { 
-              log(feedEntityAlert.length + " ALERTS (url: " + requestSettings.url + ")");
+              log(feedEntityAlert.length + " ALERTS (url: " + requestSettings.url + ")", true);
               await insertDb("", urlRt.id, "realTimesAlerts", feedEntityAlert);
             }
 
             resolve();
           } catch (err) {
             resolve();
-            log("ERROR : " + err);
+            log("ERROR : " + err, true);
           }
         } else {
           resolve();
         }
       });
     } catch (err) {
-      log("ERROR : " + err);
+      log("ERROR : " + err, true);
       reject();
     }
   });
@@ -145,7 +145,7 @@ async function insertDb(fileName, id, model, tableauJson) {
       let map = modelRepo.mapModel();
       map.get(model).insertMany(tableauJson, async (err, result) => {
         if (err) {
-          log("CSV ERROR" + model + ",id: " + id)
+          log("CSV ERROR" + model + ",id: " + id, true)
           reject();
         }
         if (result) {
@@ -153,7 +153,7 @@ async function insertDb(fileName, id, model, tableauJson) {
         }
       });
     } catch (er) {
-      log("CSV ERROR" + model + ",id: " + id + " fileName=" + fileName + ", er:" + er)
+      log("CSV ERROR" + model + ",id: " + id + " fileName=" + fileName + ", er:" + er, true)
       reject();
     }
   });
