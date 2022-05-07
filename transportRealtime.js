@@ -2,6 +2,7 @@ var GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 var request = require('request');
 var modelRepo = require('./model');
 var fs = require('fs');
+path = require('path');
 
 var lstUrlRt = [];
 
@@ -9,6 +10,8 @@ async function init() {
 
   await modelRepo.initModels();
   let map = modelRepo.mapModel();
+
+  try { fs.mkdirSync("log"); } catch(e) { if ( e.code != 'EEXIST' ) throw e; }
 
   //let lstUrlRt = [];
   let criteria;
